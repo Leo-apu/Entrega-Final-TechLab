@@ -10,6 +10,13 @@ import authRoutes from "./routes/auth.routes.js";
 import { notFound } from "./middlewares/notFound.middleware.js";
 import { errorHandler } from "./middlewares/error.middleware.js";
 
+import swaggerUi from "swagger-ui-express";
+import fs from "fs";
+
+const swaggerDocument = JSON.parse(
+  fs.readFileSync("./swagger-output.json")
+);
+
 dotenv.config();
 
 const app = express();
@@ -19,6 +26,8 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use(morgan("dev"));
+
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use("/api/products", productsRoutes);
 
@@ -32,4 +41,5 @@ const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
+  console.log(`http://localhost:${PORT}`);
 });

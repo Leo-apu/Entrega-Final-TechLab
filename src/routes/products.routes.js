@@ -16,18 +16,105 @@ import { verifyAdmin } from "../middlewares/role.middleware.js";
 
 const router = express.Router();
 
-router.get("/", getAllProducts);
+router.get(
+  "/",
 
-router.get("/search/name", searchProduct);
+  // #swagger.tags = ['Products']
+  // #swagger.summary = 'Obtener todos los productos'
+  // #swagger.description = 'Retorna una lista completa de productos'
 
-router.get("/:id", getProductById);
+  getAllProducts
+);
 
-router.post("/create", verifyToken, verifyAdmin, createProduct);
+router.get(
+  "/search/name",
 
-router.delete("/:id", verifyToken, verifyAdmin, deleteProduct);
+  // #swagger.tags = ['Products']
+  // #swagger.summary = 'Buscar producto por nombre'
 
-router.put("/:id", verifyToken, verifyAdmin, updateProduct);
+  searchProduct
+);
 
-router.patch("/:id", verifyToken, verifyAdmin, updatePatchProduct);
+router.get(
+  "/:id",
+
+  // #swagger.tags = ['Products']
+  // #swagger.summary = 'Obtener producto por ID'
+
+  getProductById
+);
+
+router.post(
+  "/create",
+
+  // #swagger.tags = ['Products']
+  // #swagger.summary = 'Crear producto'
+  // #swagger.description = 'Crea un nuevo producto (solo admin)'
+
+  // #swagger.security = [{
+  //   "bearerAuth": []
+  // }]
+
+  /* #swagger.parameters['body'] = {
+        in: 'body',
+        required: true,
+        schema: { $ref: '#/definitions/Product' }
+  } */
+
+  verifyToken,
+  verifyAdmin,
+  createProduct
+);
+
+router.delete(
+  "/:id",
+
+  // #swagger.tags = ['Products']
+  // #swagger.summary = 'Eliminar producto'
+
+  // #swagger.security = [{
+  //   "bearerAuth": []
+  // }]
+
+  verifyToken,
+  verifyAdmin,
+  deleteProduct
+);
+
+router.put(
+  "/:id",
+
+  // #swagger.tags = ['Products']
+  // #swagger.summary = 'Actualizar producto completo'
+
+  // #swagger.security = [{
+  //   "bearerAuth": []
+  // }]
+
+  /* #swagger.parameters['body'] = {
+        in: 'body',
+        required: true,
+        schema: { $ref: '#/definitions/Product' }
+  } */
+
+  verifyToken,
+  verifyAdmin,
+  updateProduct
+);
+
+router.patch(
+  "/:id",
+
+  // #swagger.tags = ['Products']
+  // #swagger.summary = 'Actualizar parcialmente un producto'
+
+  // #swagger.security = [{
+  //   "bearerAuth": []
+  // }]
+
+  verifyToken,
+  verifyAdmin,
+  updatePatchProduct
+);
 
 export default router;

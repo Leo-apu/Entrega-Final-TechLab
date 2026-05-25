@@ -1,4 +1,5 @@
 allowBuilds:
   '@firebase/util': true
+  '@scarf/scarf': true
   bcrypt: true
   protobufjs: true
