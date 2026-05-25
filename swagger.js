@@ -1,4 +1,6 @@
 import swaggerAutogen from "swagger-autogen";
+import dotenv from "dotenv";
+dotenv.config();
 
 const doc = {
   info: {
@@ -7,8 +9,14 @@ const doc = {
     version: "1.0.0",
   },
 
-  host: "localhost:3000",
-  schemes: ["http"],
+  servers: [
+    {
+      url: process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : "http://localhost:3000",
+      description: "Servidor API",
+    },
+  ],
 
   tags: [
     {
@@ -53,6 +61,9 @@ const doc = {
 
 const outputFile = "./swagger-output.json";
 
-const endpointsFiles = ["./src/index.js"];
+const endpointsFiles = [
+  "./src/routes/products.routes.js",
+  "./src/routes/auth.routes.js"
+];
 
 swaggerAutogen()(outputFile, endpointsFiles, doc);
