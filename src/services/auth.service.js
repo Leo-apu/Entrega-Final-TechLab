@@ -1,16 +1,8 @@
 import bcrypt from "bcrypt";
 
-import {
-  createUserModel,
-  getUserByEmailModel
-} from "../models/user.model.js";
+import { createUserModel, getUserByEmailModel } from "../models/user.model.js";
 
-export const registerUserService = async (
-  email,
-  password,
-  role
-) => {
-
+export const registerUserService = async (email, password, role) => {
   const existingUser = await getUserByEmailModel(email);
 
   if (existingUser) {
@@ -29,7 +21,7 @@ export const registerUserService = async (
     email,
     password: hashedPassword,
     role,
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
   };
 
   const id = await createUserModel(newUser);
@@ -37,25 +29,18 @@ export const registerUserService = async (
   return {
     id,
     email,
-    role
+    role,
   };
 };
 
-export const validateUser = async (
-  email,
-  password
-) => {
-
+export const validateUser = async (email, password) => {
   const user = await getUserByEmailModel(email);
 
   if (!user) {
     return null;
   }
 
-  const isValidPassword = await bcrypt.compare(
-    password,
-    user.password
-  );
+  const isValidPassword = await bcrypt.compare(password, user.password);
 
   if (!isValidPassword) {
     return null;

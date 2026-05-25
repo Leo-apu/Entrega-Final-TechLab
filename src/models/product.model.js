@@ -7,7 +7,7 @@ import {
   doc,
   updateDoc,
   query,
-  where
+  where,
 } from "firebase/firestore";
 
 import { db } from "../config/firebase.js";
@@ -19,7 +19,7 @@ export const getAllProductsModel = async () => {
 
   return snapshot.docs.map((doc) => ({
     id: doc.id,
-    ...doc.data()
+    ...doc.data(),
   }));
 };
 
@@ -34,7 +34,7 @@ export const getProductByIdModel = async (id) => {
 
   return {
     id: snapshot.id,
-    ...snapshot.data()
+    ...snapshot.data(),
   };
 };
 
@@ -45,7 +45,6 @@ export const createProductModel = async (product) => {
 };
 
 export const deleteProductModel = async (id) => {
-
   const productRef = doc(db, "products", id);
 
   const snapshot = await getDoc(productRef);
@@ -60,7 +59,6 @@ export const deleteProductModel = async (id) => {
 };
 
 export const updateProductModel = async (id, product) => {
-
   const productRef = doc(db, "products", id);
 
   const snapshot = await getDoc(productRef);
@@ -73,27 +71,22 @@ export const updateProductModel = async (id, product) => {
 
   return {
     id,
-    ...product
+    ...product,
   };
 };
 
 export const getProductByCategoryModel = async (category) => {
-
-  const q = query(
-    productsCollection,
-    where("category", "==", category)
-  );
+  const q = query(productsCollection, where("category", "==", category));
 
   const snapshot = await getDocs(q);
 
   return snapshot.docs.map((doc) => ({
     id: doc.id,
-    ...doc.data()
+    ...doc.data(),
   }));
 };
 
 export const updatePatchProductModel = async (id, product) => {
-
   const productRef = doc(db, "products", id);
 
   const snapshot = await getDoc(productRef);
@@ -107,6 +100,6 @@ export const updatePatchProductModel = async (id, product) => {
   return {
     id,
     ...snapshot.data(),
-    ...product
+    ...product,
   };
 };

@@ -7,16 +7,12 @@ import {
   deleteProduct,
   updateProduct,
   updatePatchProduct,
-  searchProduct
+  searchProduct,
 } from "../controllers/products.controller.js";
 
-import {
-  verifyToken
-} from "../middlewares/auth.middleware.js";
+import { verifyToken } from "../middlewares/auth.middleware.js";
 
-import {
-  verifyAdmin
-} from "../middlewares/role.middleware.js";
+import { verifyAdmin } from "../middlewares/role.middleware.js";
 
 const router = express.Router();
 
@@ -26,32 +22,12 @@ router.get("/search/name", searchProduct);
 
 router.get("/:id", getProductById);
 
-router.post(
-  "/create",
-  verifyToken,
-  verifyAdmin,
-  createProduct
-);
+router.post("/create", verifyToken, verifyAdmin, createProduct);
 
-router.delete(
-  "/:id",
-  verifyToken,
-  verifyAdmin,
-  deleteProduct
-);
+router.delete("/:id", verifyToken, verifyAdmin, deleteProduct);
 
-router.put(
-  "/:id",
-  verifyToken,
-  verifyAdmin,
-  updateProduct
-);
+router.put("/:id", verifyToken, verifyAdmin, updateProduct);
 
-router.patch(
-  "/:id",
-  verifyToken,
-  verifyAdmin,
-  updatePatchProduct
-);
+router.patch("/:id", verifyToken, verifyAdmin, updatePatchProduct);
 
 export default router;

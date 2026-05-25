@@ -5,7 +5,7 @@ import {
   deleteProductModel,
   updateProductModel,
   updatePatchProductModel,
-  getProductByCategoryModel
+  getProductByCategoryModel,
 } from "../models/product.model.js";
 
 export const getAllProductsService = async () => {
