@@ -14,11 +14,13 @@ import swaggerUi from "swagger-ui-express";
 import fs from "fs";
 
 const swaggerDocument = JSON.parse(
-  fs.readFileSync(new URL("../swagger-output.json", import.meta.url))
+  fs.readFileSync(new URL("../swagger-output.json", import.meta.url)),
 );
 
-const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui.min.css";
-const JS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui-bundle.min.js";
+const CSS_URL =
+  "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui.min.css";
+const JS_URL =
+  "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui-bundle.min.js";
 
 dotenv.config();
 
@@ -33,11 +35,18 @@ app.use(morgan("dev"));
 app.get("/", (req, res) => {
   res.json({
     message: "TechLab API funcionando correctamente",
-    docs: "/api/docs"
+    docs: "/api/docs",
   });
 });
 
-app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument , { customCssUrl: CSS_URL, customJsUrl: JS_URL }));
+app.use(
+  "/api/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument, {
+    customCssUrl: CSS_URL,
+    customJsUrl: JS_URL,
+  }),
+);
 
 app.use("/api/products", productsRoutes);
 
@@ -49,11 +58,11 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 
-if (process.env.NODE_ENV !== "production") {
-  app.listen(PORT, () => {
-    console.log(`Servidor corriendo en puerto ${PORT}`);
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en puerto ${PORT}`);
+  if (process.env.NODE_ENV !== "production") {
     console.log(`http://localhost:${PORT}`);
-  });
-}
+  }
+});
 
 export default app;

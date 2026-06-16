@@ -14,12 +14,10 @@ export const getAllProducts = async (req, res, next) => {
 
     if (category) {
       const products = await getProductByCategoryService(category);
-
       return res.status(200).json(products);
     }
 
     const products = await getAllProductsService();
-
     res.status(200).json(products);
   } catch (error) {
     next(error);
@@ -44,7 +42,28 @@ export const getProductById = async (req, res, next) => {
 
 export const createProduct = async (req, res, next) => {
   try {
-    const id = await createProductService(req.body);
+    const { name, price, stock, category } = req.body;
+
+    if (!name || price === undefined || stock === undefined || !category) {
+      return res.status(400).json({
+        message:
+          "Todos los campos (name, price, stock, category) son obligatorios",
+      });
+    }
+
+    if (typeof price !== "number" || price < 0) {
+      return res.status(400).json({
+        message: "El precio debe ser un número válido igual o mayor a 0",
+      });
+    }
+
+    if (typeof stock !== "number" || stock < 0) {
+      return res.status(400).json({
+        message: "El stock debe ser un número válido igual o mayor a 0",
+      });
+    }
+
+    const id = await createProductService({ name, price, stock, category });
 
     res.status(201).json({
       message: "Producto creado",
@@ -72,7 +91,7 @@ export const updateProduct = async (req, res, next) => {
     const { id } = req.params;
     const { name, price, stock, category } = req.body;
 
-    if (!name || !price || !stock || !category) {
+    if (!name || price === undefined || stock === undefined || !category) {
       return res.status(400).json({
         message: "Todos los campos son obligatorios",
       });
@@ -102,33 +121,31 @@ export const updatePatchProduct = async (req, res, next) => {
 
     const data = {};
     if (req.body.name !== undefined) data.name = req.body.name;
-    if (req.body.price !== undefined && typeof req.body.price === "number")
-      data.price = req.body.price;
     if (req.body.category !== undefined) data.category = req.body.category;
 
+    if (req.body.price !== undefined && typeof req.body.price === "number") {
+      data.price = req.body.price;
+    }
+
+    if (req.body.stock !== undefined && typeof req.body.stock === "number") {
+      data.stock = req.body.stock;
+    }
+
     if (Object.keys(data).length === 0) {
-      return res
-        .status(422)
-        .json({ error: "No se proporcionaron campos para actualizar" });
+      return res.status(422).json({
+        message: "No se proporcionaron campos válidos para actualizar",
+      });
     }
 
     const updated = await updatePatchProductService(id, data);
 
     if (!updated) {
-      return res.status(404).json({ error: "Producto no encontrado" });
+      return res.status(404).json({
+        message: "Producto no encontrado",
+      });
     }
 
-    res.json(updated);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getProductByCategory = async (req, res, next) => {
-  try {
-    const products = await getProductByCategoryService(req.params.category);
-
-    res.status(200).json(products);
+    res.status(200).json(updated);
   } catch (error) {
     next(error);
   }
